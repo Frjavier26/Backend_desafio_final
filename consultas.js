@@ -33,7 +33,7 @@ const vereficarCredencial = async (email, password) => {
   const consulta = 'SELECT * FROM usuarios WHERE correo = $1';
 
   const {
-    rows: [email],
+    rows: [correo],
     rowCount,
   } = await pool.query(consulta, values);
 

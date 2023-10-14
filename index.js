@@ -14,7 +14,7 @@ app.use(express.json())
 
 
 // Registro de usuario 
-app.post('/usuarios', verificarUsuario, reporte, async (req, res) => {
+app.post('/usuarios', reporte, async (req, res) => {
     try {
         const usuario = req.body;
         await registrarUsuario(usuario);
@@ -26,7 +26,7 @@ app.post('/usuarios', verificarUsuario, reporte, async (req, res) => {
 });
 
 // INICIO DE SESION USUARIO YA REGISTRADO // jwt.sign genera un token, primer argumento es un payload y llave secreta se usa para decodificar el token 
-app.post('/login', reporte, async (req, res) => {
+app.post('/login', verificarUsuario, reporte, async (req, res) => {
     try {
         const { correo, clave } = req.body
         await vereficarCredencial(correo, clave)

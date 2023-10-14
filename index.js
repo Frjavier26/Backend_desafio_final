@@ -24,7 +24,6 @@ app.use(express.json());
 app.post('/usuarios', reporte, async (req, res) => {
   try {
     const usuario = req.body;
-    console.log(usuario);
     await registrarUsuario(usuario);
     res.send('Usuario creado con éxito');
   } catch (error) {

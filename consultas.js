@@ -33,12 +33,14 @@ const vereficarCredencial = async (email, password) => {
   const consulta = 'SELECT * FROM usuarios WHERE correo = $1';
 
   const {
-    rows: [correo],
+    rows: [usuario],
     rowCount,
   } = await pool.query(consulta, values);
 
-  const { password: passwordEncriptada } = usuario;
+  const { clave: passwordEncriptada } = usuario;
   const passwordEsCorrecta = bcrypt.compareSync(password, passwordEncriptada);
+  console.log(passwordEsCorrecta);
+  console.log(rowCount);
 
   if (!passwordEsCorrecta || !rowCount)
     throw { code: 401, message: 'Email o contraseña incorrecta' };

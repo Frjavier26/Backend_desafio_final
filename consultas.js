@@ -28,27 +28,27 @@ const registrarUsuario = async (usuario) => {
 
 //Funcion para inicio de sesion // compareSync hace la comparacion entre la contraseña encriptada vs la contraseña original
 
-const vereficarCredencial = async (correo, clave) => {
-  const values = [correo];
+const vereficarCredencial = async (email, password) => {
+  const values = [email];
   const consulta = 'SELECT * FROM usuarios WHERE correo = $1';
 
   const {
-    rows: [usuario],
+    rows: [email],
     rowCount,
   } = await pool.query(consulta, values);
 
-  const { clave: passwordEncriptada } = usuario;
-  const passwordEsCorrecta = bcrypt.compareSync(clave, passwordEncriptada);
+  const { password: passwordEncriptada } = usuario;
+  const passwordEsCorrecta = bcrypt.compareSync(password, passwordEncriptada);
 
   if (!passwordEsCorrecta || !rowCount)
     throw { code: 401, message: 'Email o contraseña incorrecta' };
 };
 
 // MODIFICACION DE USUARIOS
-const modificarUsuario = async (nombre, apellido, id) => {
+const modificarUsuario = async (name, lastName, id) => {
   const consulta =
     'UPDATE usuarios SET nombre = $1, apellido = $2 WHERE id = $3';
-  const values = [nombre, apellido, id];
+  const values = [name, lastName, id];
   const { rowCount } = await pool.query(consulta, values);
   if (rowCount === 0) {
     throw { code: 404, message: 'No se consiguio ningun usuario con este id' };

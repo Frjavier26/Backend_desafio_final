@@ -59,19 +59,19 @@ const modificarUsuario = async (name, lastName, id) => {
 
 //Aregar nuevo producto
 const agregarProducto = async (
-  nombre_producto,
-  precio,
-  url_imagen,
+  product,
+  price,
+  url,
   descripcion_corta,
   descripcion
 ) => {
   const consulta = 'INSERT INTO productos values(DEFAULT, $1, $2, $3, $4, $5)';
   const values = [
-    nombre_producto,
-    precio,
-    url_imagen,
-    descripcion_corta,
-    descripcion,
+    product,
+  price,
+  url,
+  descripcion_corta,
+  descripcion
   ];
   const result = await pool.query(consulta, values);
   console.log('Producto agregado');

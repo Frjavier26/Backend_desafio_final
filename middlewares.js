@@ -22,4 +22,14 @@ const reporte = async (req, res, next) => {
   next();
 };
 
-module.exports = { verificarUsuario, reporte };
+const usuarioExiste = (req, res, next) => {
+    const { correo, clave } = req.body
+    if (!correo || !clave) {
+        res
+            .status(401)
+            .send({ message: "No se recibieron las credenciales en esta consulta" })
+    }
+    next()
+}
+
+module.exports = { verificarUsuario, reporte, usuarioExiste };

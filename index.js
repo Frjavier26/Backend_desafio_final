@@ -13,7 +13,8 @@ const {
   modificarUsuario,
   getProducto,
 } = require('./consultas');
-const { verificarUsuario, reporte } = require('./middlewares');
+
+const { verificarUsuario, reporte, usuarioExiste } = require('./middlewares');
 require('dotenv').config();
 
 app.listen(3000, console.log('SERVER ON'));
@@ -74,18 +75,18 @@ app.put('/usuarios/:id', reporte, async (req, res) => {
 app.post('/productos', reporte, async (req, res) => {
   try {
     const {
-      nombre_producto,
-      precio,
-      url_imagen,
-      descripcion_corta,
-      descripcion,
+        product,
+        price,
+        url,
+        descripcion_corta,
+        descripcion
     } = req.body;
     await agregarProducto(
-      nombre_producto,
-      precio,
-      url_imagen,
-      descripcion_corta,
-      descripcion
+        product,
+        price,
+        url,
+        descripcion_corta,
+        descripcion
     );
     res.send('Producto agregado con éxito');
   } catch (error) {

@@ -14,12 +14,13 @@ const pool = new Pool({
 const getUsuarios = async (email) => {
   const values = [email];
   const consulta = 'SELECT * FROM usuarios WHERE user_email = $1';
-
+  console.log('email de getUsuarios: ', email);
   const {
-    rows: [usuarios],
+    rows: [usuario],
     rowCount,
   } = await pool.query(consulta, values);
-
+  console.log('usuarios de getUsuarios: ', usuario);
+  console.log('rowCount de getUsuarios: ', rowCount);
   if (!rowCount) {
     throw {
       code: 404,
@@ -57,8 +58,8 @@ const vereficarCredencial = async (user_email, user_password) => {
     user_password,
     passwordEncriptada
   );
-  console.log(passwordEsCorrecta);
-  console.log(rowCount);
+  console.log('password correcta? ', passwordEsCorrecta);
+  console.log('rowCount: ', rowCount);
 
   if (!passwordEsCorrecta || !rowCount)
     throw { code: 401, message: 'Email o contraseña incorrecta' };

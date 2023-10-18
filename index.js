@@ -55,11 +55,12 @@ app.post('/login', async (req, res) => {
 app.get('/usuarios', tokenVerification, async (req, res) => {
   try {
     const token = req.header('Authorization').split('Bearer ')[1];
-    const { correo } = jwt.decode(token);
-    const usuario = await getUsuarios(correo);
+    const { user_email } = jwt.decode(token);
+    const { usuario } = await getUsuarios(user_email);
+    console.log('usuario de app.get/usuarios: ', usuario);
     res.json(usuario);
   } catch (error) {
-    res.status(error.code || 500).send(error);
+    res.status(error.code || 501).send('error app.get');
   }
 });
 

@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
+
 const {
   getProductos,
   registrarUsuario,
@@ -13,8 +14,8 @@ const {
   modificarUsuario,
   getProducto,
 } = require('./consultas');
+const { checkearCredenciales, reporte, tokenVerification } = require('./middlewares');
 
-const { verificarUsuario, reporte, usuarioExiste } = require('./middlewares');
 require('dotenv').config();
 
 app.listen(3000, console.log('SERVER ON'));
@@ -22,7 +23,7 @@ app.use(cors());
 app.use(express.json());
 
 // Registro de usuario
-app.post('/usuarios', reporte, async (req, res) => {
+app.post('/usuarios', checkearCredenciales, async (req, res) => {
   try {
     const usuario = req.body;
     await registrarUsuario(usuario);
@@ -34,7 +35,7 @@ app.post('/usuarios', reporte, async (req, res) => {
 });
 
 // INICIO DE SESION USUARIO YA REGISTRADO // jwt.sign genera un token, primer argumento es un payload y llave secreta se usa para decodificar el token
-app.post('/login', verificarUsuario, reporte, async (req, res) => {
+app.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
     await vereficarCredencial(email, password);
@@ -47,10 +48,12 @@ app.post('/login', verificarUsuario, reporte, async (req, res) => {
 });
 
 //  RUTA GET PARA VISUALIZAR LOS USUARIOS
-app.get('/usuarios', reporte, async (req, res) => {
+app.get('/usuarios',tokenVerification, async (req, res) => {
   try {
-    const usuarios = await getUsuarios();
-    res.json(usuarios);
+    const token = req.header("Authorization").split("Bearer ")[1]
+    const { correo } = jwt.decode(token)
+    const usuario = await getUsuarios(correo)
+    res.json(usuario);
   } catch (error) {
     res.status(error.code || 500).send(error);
   }
@@ -72,7 +75,7 @@ app.put('/usuarios/:id', reporte, async (req, res) => {
 });
 
 // Agregar un producto
-app.post('/productos', reporte, async (req, res) => {
+app.post('/productos', async (req, res) => {
   try {
     const {
         product,
@@ -104,7 +107,7 @@ app.post('/productos', reporte, async (req, res) => {
 });
 
 //  RUTA GET PARA VISUALIZAR LOS PRODUCTOS
-app.get('/productos', reporte, async (req, res) => {
+app.get('/productos', async (req, res) => {
   try {
     const productos = await getProductos();
     res.json(productos);

@@ -1,6 +1,8 @@
-const verificarUsuario = async (req, res, next) => {
-  const { email, password } = req.body;
-  if (!email || !password) {
+const jwt = require("jsonwebtoken")
+
+const checkearCredenciales = async (req, res, next) => {
+  const { name, lastName, email, password  } = req.body;
+  if (!name || !lastName || !email || !password) {
     res.status(400);
     res.send({ message: 'Credenciales invalidas' });
   }
@@ -22,14 +24,13 @@ const reporte = async (req, res, next) => {
   next();
 };
 
-const usuarioExiste = (req, res, next) => {
-    const { correo, clave } = req.body
-    if (!correo || !clave) {
-        res
-            .status(401)
-            .send({ message: "No se recibieron las credenciales en esta consulta" })
-    }
+const tokenVerification = (req, res, next) => {
+    const token = req.header("Authorization").split("Bearer ")[1]
+    if (!token) throw { code: 401, message: "Debe incluir el token en las cabeceras (Authorization)" }
+
+    const tokenValido = jwt.verify(token, "Llave_secreta")
+    if (!tokenValido) throw { code: 401, message: "El token es inválido" }
     next()
 }
 
-module.exports = { verificarUsuario, reporte, usuarioExiste };
+module.exports = { checkearCredenciales, reporte, tokenVerification };

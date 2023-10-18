@@ -11,9 +11,18 @@ const pool = new Pool({
 });
 
 //FUNCION PARA OBTENER LOS USUARIOS
-const getUsuarios = async () => {
-  const { rows: usuarios } = await pool.query('SELECT * FROM usuarios');
-  return usuarios;
+const getUsuarios = async (email) => {
+    const values = [email]
+    const consulta = "SELECT * FROM usuarios WHERE email = $1"
+
+    const { rows: [usuarios], rowCount } = await pool.query(consulta, values)
+
+    if (!rowCount) {
+        throw { code: 404, message: "No se encontró ningún usuario con este email" }
+    }
+
+    delete usuarios.password
+    return usuarios
 };
 
 // Registro de usuario con clave encriptada// DEBERIAMOS AGREGAR LO QUE ES ROL Y NOMBRE, ESO LO VEREMOS AL HACER LA BASE DE DATOS

@@ -37,9 +37,9 @@ app.post('/usuarios', checkearCredenciales, async (req, res) => {
 // INICIO DE SESION USUARIO YA REGISTRADO // jwt.sign genera un token, primer argumento es un payload y llave secreta se usa para decodificar el token
 app.post('/login', async (req, res) => {
   try {
-    const { email, password } = req.body;
-    await vereficarCredencial(email, password);
-    const token = jwt.sign({ email }, 'Llave_secreta');
+    const { user_email, user_password } = req.body;
+    await vereficarCredencial(user_email, user_password);
+    const token = jwt.sign({ user_email }, 'Llave_secreta');
     res.send(token);
   } catch (error) {
     console.log(error);

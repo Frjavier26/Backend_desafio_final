@@ -13,7 +13,7 @@ const pool = new Pool({
 //FUNCION PARA OBTENER LOS USUARIOS
 const getUsuarios = async (email) => {
     const values = [email]
-    const consulta = "SELECT * FROM usuarios WHERE email = $1"
+    const consulta = "SELECT * FROM usuarios WHERE user_email = $1"
 
     const { rows: [usuarios], rowCount } = await pool.query(consulta, values)
 
@@ -37,17 +37,17 @@ const registrarUsuario = async (usuario) => {
 
 //Funcion para inicio de sesion // compareSync hace la comparacion entre la contraseña encriptada vs la contraseña original
 
-const vereficarCredencial = async (email, password) => {
-  const values = [email];
-  const consulta = 'SELECT * FROM usuarios WHERE correo = $1';
+const vereficarCredencial = async (user_email, user_password) => {
+  const values = [user_email];
+  const consulta = 'SELECT * FROM usuarios WHERE user_email = $1';
 
   const {
     rows: [usuario],
     rowCount,
   } = await pool.query(consulta, values);
 
-  const { clave: passwordEncriptada } = usuario;
-  const passwordEsCorrecta = bcrypt.compareSync(password, passwordEncriptada);
+  const { user_password: passwordEncriptada } = usuario;
+  const passwordEsCorrecta = bcrypt.compareSync(user_password, passwordEncriptada);
   console.log(passwordEsCorrecta);
   console.log(rowCount);
 
@@ -58,8 +58,8 @@ const vereficarCredencial = async (email, password) => {
 // MODIFICACION DE USUARIOS
 const modificarUsuario = async (name, lastName, id) => {
   const consulta =
-    'UPDATE usuarios SET nombre = $1, apellido = $2 WHERE id = $3';
-  const values = [name, lastName, id];
+    'UPDATE usuarios SET user_name = $1, user_lastname = $2 WHERE id = $3';
+  const values = [user_name, user_lastname, id];
   const { rowCount } = await pool.query(consulta, values);
   if (rowCount === 0) {
     throw { code: 404, message: 'No se consiguio ningun usuario con este id' };
@@ -96,7 +96,7 @@ const modificarProducto = async (
   id
 ) => {
   const consulta =
-    'UPDATE productos SET nombre_producto = $1, precio = $2, url_imagen = $3, descripcion_corta = $4, descripcion = $5 WHERE id = $6';
+    'UPDATE productos SET product_name = $1, price = $2, img_url = $3, short_description = $4, long_description = $5 WHERE id = $6';
   const values = [
     nombre_producto,
     precio,

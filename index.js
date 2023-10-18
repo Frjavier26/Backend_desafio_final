@@ -78,18 +78,19 @@ app.put('/usuarios/:id', reporte, async (req, res) => {
 app.post('/productos', async (req, res) => {
   try {
     const {
-        product,
+        product_name,
         price,
-        url,
-        descripcion_corta,
-        descripcion
+        img_url,
+        short_description,
+        long_description, 
+        
     } = req.body;
     await agregarProducto(
-        product,
+        product_name,
         price,
-        url,
-        descripcion_corta,
-        descripcion
+        img_url,
+        short_description,
+        long_description
     );
     res.send('Producto agregado con éxito');
   } catch (error) {

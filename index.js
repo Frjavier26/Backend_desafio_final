@@ -56,7 +56,7 @@ app.get('/usuarios', tokenVerification, async (req, res) => {
   try {
     const token = req.header('Authorization').split('Bearer ')[1];
     const { user_email } = jwt.decode(token);
-    const { usuario } = await getUsuarios(user_email);
+    const  usuario  = await getUsuarios(user_email);
     console.log('usuario de app.get/usuarios: ', usuario);
     res.json(usuario);
   } catch (error) {
@@ -83,18 +83,18 @@ app.put('/usuarios/:id', reporte, async (req, res) => {
 app.post('/productos', async (req, res) => {
   try {
     const {
-      product_name,
-      price,
-      img_url,
+      product,
+      precio,
+      url,
       short_description,
       long_description,
     } = req.body;
     await agregarProducto(
-      product_name,
-      price,
-      img_url,
-      short_description,
-      long_description
+        product,
+        precio,
+        url,
+        short_description,
+        long_description
     );
     res.send('Producto agregado con éxito');
   } catch (error) {

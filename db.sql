@@ -15,4 +15,4 @@ INSERT INTO productos (id, product_name, price, img_URL, short_description, long
 
 INSERT INTO productos (id, product_name, price, img_URL, short_description, long_description, user_email) 
 	values(default, 'Producto de prueba', 1234990, 'https://i.blogs.es/a19bfc/testing/1366_2000.jpg', 
-'ni alcanza para descripción', 'la mansa descripción del producto', '');
+'ni alcanza para descripción', 'la mansa descripción del producto', 'francisco.aqueveque@gmail.com');

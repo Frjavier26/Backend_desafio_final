@@ -14,7 +14,11 @@ const {
   modificarUsuario,
   getProducto,
 } = require('./consultas');
-const { checkearCredenciales, reporte, tokenVerification } = require('./middlewares');
+const {
+  checkearCredenciales,
+  reporte,
+  tokenVerification,
+} = require('./middlewares');
 
 require('dotenv').config();
 
@@ -48,11 +52,11 @@ app.post('/login', async (req, res) => {
 });
 
 //  RUTA GET PARA VISUALIZAR LOS USUARIOS
-app.get('/usuarios',tokenVerification, async (req, res) => {
+app.get('/usuarios', tokenVerification, async (req, res) => {
   try {
-    const token = req.header("Authorization").split("Bearer ")[1]
-    const { correo } = jwt.decode(token)
-    const usuario = await getUsuarios(correo)
+    const token = req.header('Authorization').split('Bearer ')[1];
+    const { correo } = jwt.decode(token);
+    const usuario = await getUsuarios(correo);
     res.json(usuario);
   } catch (error) {
     res.status(error.code || 500).send(error);
@@ -78,19 +82,18 @@ app.put('/usuarios/:id', reporte, async (req, res) => {
 app.post('/productos', async (req, res) => {
   try {
     const {
-        product_name,
-        price,
-        img_url,
-        short_description,
-        long_description, 
-        
+      product_name,
+      price,
+      img_url,
+      short_description,
+      long_description,
     } = req.body;
     await agregarProducto(
-        product_name,
-        price,
-        img_url,
-        short_description,
-        long_description
+      product_name,
+      price,
+      img_url,
+      short_description,
+      long_description
     );
     res.send('Producto agregado con éxito');
   } catch (error) {

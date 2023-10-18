@@ -12,17 +12,23 @@ const pool = new Pool({
 
 //FUNCION PARA OBTENER LOS USUARIOS
 const getUsuarios = async (email) => {
-    const values = [email]
-    const consulta = "SELECT * FROM usuarios WHERE user_email = $1"
+  const values = [email];
+  const consulta = 'SELECT * FROM usuarios WHERE user_email = $1';
 
-    const { rows: [usuarios], rowCount } = await pool.query(consulta, values)
+  const {
+    rows: [usuarios],
+    rowCount,
+  } = await pool.query(consulta, values);
 
-    if (!rowCount) {
-        throw { code: 404, message: "No se encontró ningún usuario con este email" }
-    }
+  if (!rowCount) {
+    throw {
+      code: 404,
+      message: 'No se encontró ningún usuario con este email',
+    };
+  }
 
-    delete usuarios.password
-    return usuarios
+  delete usuarios.password;
+  return usuarios;
 };
 
 // Registro de usuario con clave encriptada// DEBERIAMOS AGREGAR LO QUE ES ROL Y NOMBRE, ESO LO VEREMOS AL HACER LA BASE DE DATOS
@@ -47,7 +53,10 @@ const vereficarCredencial = async (user_email, user_password) => {
   } = await pool.query(consulta, values);
 
   const { user_password: passwordEncriptada } = usuario;
-  const passwordEsCorrecta = bcrypt.compareSync(user_password, passwordEncriptada);
+  const passwordEsCorrecta = bcrypt.compareSync(
+    user_password,
+    passwordEncriptada
+  );
   console.log(passwordEsCorrecta);
   console.log(rowCount);
 
@@ -75,13 +84,7 @@ const agregarProducto = async (
   descripcion
 ) => {
   const consulta = 'INSERT INTO productos values(DEFAULT, $1, $2, $3, $4, $5)';
-  const values = [
-    product,
-  price,
-  url,
-  descripcion_corta,
-  descripcion
-  ];
+  const values = [product, price, url, descripcion_corta, descripcion];
   const result = await pool.query(consulta, values);
   console.log('Producto agregado');
 };

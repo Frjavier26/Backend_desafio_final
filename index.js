@@ -82,6 +82,10 @@ app.put('/usuarios/:id', reporte, async (req, res) => {
 // Agregar un producto
 app.post('/productos', async (req, res) => {
   try {
+    const Authorization = req.header('Authorization'); // Da la autorizacion al token para poder hacer la modificacion
+    const token = Authorization.split('Bearer ')[1];
+    jwt.verify(token, 'Llave_secreta'); // Verifica el token y le da el ok
+    const { user_email } = jwt.decode(token); // decodifica el token para ver la informacion que posee
     const {
       product,
       precio,
@@ -94,7 +98,8 @@ app.post('/productos', async (req, res) => {
         precio,
         url,
         short_description,
-        long_description
+        long_description,
+        user_email
     );
     res.send('Producto agregado con éxito');
   } catch (error) {

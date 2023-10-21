@@ -136,23 +136,17 @@ app.get('/productos/:id', reporte, async (req, res) => {
 app.put('/productos/:id', reporte, async (req, res) => {
   try {
     const { id } = req.params;
-    const {
-        producto,
-        price,
-        img,
-        descripcion_corta,
-        descripcion,
-    } = req.query; // aqui colocaremos lo que queremos modificar del producto
+    const { producto, price, img, descripcion_corta, descripcion } = req.body; // aqui colocaremos lo que queremos modificar del producto
     const Authorization = req.header('Authorization'); // Da la autorizacion al token para poder hacer la modificacion
     const token = Authorization.split('Bearer ')[1];
     jwt.verify(token, 'Llave_secreta'); // Verifica el token y le da el ok
     const { user_email } = jwt.decode(token); // decodifica el token para ver la informacion que posee
     await modificarProducto(
-        producto,
-        price,
-        img,
-        descripcion_corta,
-        descripcion,
+      producto,
+      price,
+      img,
+      descripcion_corta,
+      descripcion,
       id
     );
     res.send(`El usuario ${user_email} ha modificado el producto de id ${id}`);

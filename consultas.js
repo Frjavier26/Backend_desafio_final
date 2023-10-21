@@ -71,7 +71,7 @@ const vereficarCredencial = async (user_email, user_password) => {
 const modificarUsuario = async (name, lastName, id) => {
   const consulta =
     'UPDATE usuarios SET user_name = $1, user_lastname = $2 WHERE id = $3';
-  const values = [user_name, user_lastname, id];
+  const values = [name, lastName, id];
   const { rowCount } = await pool.query(consulta, values);
   if (rowCount === 0) {
     throw { code: 404, message: 'No se consiguio ningun usuario con este id' };

@@ -1,9 +1,9 @@
 CREATE DATABASE gamezone;
 
 CREATE TABLE productos ( id SERIAL, product_name VARCHAR(256) NOT NULL, price INT NOT NULL, img_URL VARCHAR(500) NOT NULL, 
-	short_description VARCHAR(200) NOT NULL, long_description VARCHAR(500) NOT NULL, user_email VARCHAR(100) NOT NULL UNIQUE);
+	short_description VARCHAR(200) NOT NULL, long_description VARCHAR(500) NOT NULL, user_email VARCHAR(100) NOT NULL);
 
-CREATE TABLE usuarios (id SERIAL, user_name VARCHAR(50) NOT NULL, user_lastname VARCHAR(50) NOT NULL, user_email VARCHAR(100) NOT NULL, 
+CREATE TABLE usuarios (id SERIAL, user_name VARCHAR(50) NOT NULL, user_lastname VARCHAR(50) NOT NULL, user_email VARCHAR(100) NOT NULL UNIQUE, 
 	user_password VARCHAR(500) NOT NULL);
 
 SELECT * FROM productos

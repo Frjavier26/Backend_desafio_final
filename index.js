@@ -56,7 +56,7 @@ app.get('/usuarios', tokenVerification, async (req, res) => {
   try {
     const token = req.header('Authorization').split('Bearer ')[1];
     const { user_email } = jwt.decode(token);
-    const  usuario  = await getUsuarios(user_email);
+    const usuario = await getUsuarios(user_email);
     console.log('usuario de app.get/usuarios: ', usuario);
     res.json(usuario);
   } catch (error) {
@@ -66,13 +66,13 @@ app.get('/usuarios', tokenVerification, async (req, res) => {
 
 app.put('/usuarios/:id', reporte, async (req, res) => {
   const { id } = req.params;
-  const { user_name, user_lastname } = req.query; // aqui colocaremos lo que queremos modificar del producto
+  const { name, lastName } = req.body; // aqui colocaremos lo que queremos modificar del producto
   const Authorization = req.header('Authorization'); // Da la autorizacion al token para poder hacer la modificacion
   const token = Authorization.split('Bearer ')[1];
   jwt.verify(token, 'Llave_secreta'); // Verifica el token y le da el ok
   const { user_email } = jwt.decode(token); // decodifica el token para ver la informacion que posee
   try {
-    await modificarUsuario(user_name, user_lastname, id);
+    await modificarUsuario(name, lastName, id);
     res.send(`El usuario ${user_email} ha modificado el usuario de id ${id}`);
   } catch (error) {
     res.status(error.code || 500).send(error);
@@ -86,20 +86,15 @@ app.post('/productos', async (req, res) => {
     const token = Authorization.split('Bearer ')[1];
     jwt.verify(token, 'Llave_secreta'); // Verifica el token y le da el ok
     const { user_email } = jwt.decode(token); // decodifica el token para ver la informacion que posee
-    const {
+    const { product, precio, url, short_description, long_description } =
+      req.body;
+    await agregarProducto(
       product,
       precio,
       url,
       short_description,
       long_description,
-    } = req.body;
-    await agregarProducto(
-        product,
-        precio,
-        url,
-        short_description,
-        long_description,
-        user_email
+      user_email
     );
     res.send('Producto agregado con éxito');
   } catch (error) {

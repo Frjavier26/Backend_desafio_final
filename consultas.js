@@ -12,26 +12,25 @@ const pool = new Pool({
 
 //FUNCION PARA OBTENER LOS USUARIOS
 const getUsuarios = async (user_email) => {
-    const values = [user_email];
-    const consulta = 'SELECT * FROM usuarios WHERE user_email = $1';
-  
-    const {
-      rows: [usuario],
-      rowCount,
-    } = await pool.query(consulta, values);
-  
-    if (rowCount === 0) {
-      throw {
-        code: 404,
-        message: 'No se encontró ningún usuario con este email',
-      };
-    }
-    // Eliminar la propiedad 'password' del objeto usuario si existe
-    if (usuario.password) {
-      delete usuario.password;
-    }
-    return usuario;
-  
+  const values = [user_email];
+  const consulta = 'SELECT * FROM usuarios WHERE user_email = $1';
+
+  const {
+    rows: [usuario],
+    rowCount,
+  } = await pool.query(consulta, values);
+
+  if (rowCount === 0) {
+    throw {
+      code: 404,
+      message: 'No se encontró ningún usuario con este email',
+    };
+  }
+  // Eliminar la propiedad 'password' del objeto usuario si existe
+  if (usuario.password) {
+    delete usuario.password;
+  }
+  return usuario;
 };
 
 // Registro de usuario con clave encriptada// DEBERIAMOS AGREGAR LO QUE ES ROL Y NOMBRE, ESO LO VEREMOS AL HACER LA BASE DE DATOS
@@ -68,10 +67,10 @@ const vereficarCredencial = async (user_email, user_password) => {
 };
 
 // MODIFICACION DE USUARIOS
-const modificarUsuario = async (name, lastName, id) => {
+const modificarUsuario = async (user_name, user_lastname, id) => {
   const consulta =
     'UPDATE usuarios SET user_name = $1, user_lastname = $2 WHERE id = $3';
-  const values = [name, lastName, id];
+  const values = [user_name, user_lastname, id];
   const { rowCount } = await pool.query(consulta, values);
   if (rowCount === 0) {
     throw { code: 404, message: 'No se consiguio ningun usuario con este id' };
@@ -87,13 +86,16 @@ const agregarProducto = async (
   long_description,
   user_email
 ) => {
-  const consulta = 'INSERT INTO productos values(DEFAULT, $1, $2, $3, $4, $5, $6)';
-  const values = [  product,
+  const consulta =
+    'INSERT INTO productos values(DEFAULT, $1, $2, $3, $4, $5, $6)';
+  const values = [
+    product,
     precio,
     url,
     short_description,
     long_description,
-    user_email];
+    user_email,
+  ];
   const result = await pool.query(consulta, values);
   console.log('Producto agregado');
 };

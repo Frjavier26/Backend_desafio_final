@@ -102,9 +102,9 @@ const agregarProducto = async (
 
 // MODIFICAR UN PRODUCTO
 const modificarProducto = async (
-  nombre_producto,
-  precio,
-  url_imagen,
+  producto,
+  price,
+  img,
   descripcion_corta,
   descripcion,
   id
@@ -112,12 +112,12 @@ const modificarProducto = async (
   const consulta =
     'UPDATE productos SET product_name = $1, price = $2, img_url = $3, short_description = $4, long_description = $5 WHERE id = $6';
   const values = [
-    nombre_producto,
-    precio,
-    url_imagen,
+    producto,
+    price,
+    img,
     descripcion_corta,
     descripcion,
-    id,
+    id
   ];
   const { rowCount } = await pool.query(consulta, values);
   if (rowCount === 0) {
